@@ -1,11 +1,14 @@
 import Input from "@/components/Input";
+import axios from "axios";
 import { useCallback, useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function auth() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
   const [variant, setVariant] = useState("login");
 
   const toggleVariant = useCallback(() => {
@@ -13,11 +16,38 @@ export default function auth() {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
+  
+  const login = useCallback(async () => {
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/",
+      });
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, password, router]);
+
+  const register = useCallback(async () => {
+    try {
+      await axios.post("/api/register", {
+        email,
+        name,
+        password,
+      });
+      login();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, name, password, login]);
 
   return (
     <div className="flex flex-wrap text-xl">
       <div className="flex w-full md:w-2/5 bg-[url('/images/bg-auth.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
-        <div className="w-full h-screen bg-black bg-opacity-90 px-8 sm:py-5 md:py-20">
+        <div className="w-full h-screen bg-black md:bg-opacity-90 bg-opacity-80  px-8 sm:py-5 md:py-20">
           <nav className="py5">
             <img
               src="/images/logo.svg"
@@ -29,7 +59,7 @@ export default function auth() {
           <h2 className="text-white text-4xl mb-8 font-semibold text-center">
             {variant === "login" ? "Sign in" : "Create an Account"}
           </h2>
-          <div className="flex flex-col gap-9 sm:w-2/4 md:w-full lg:w-2/3 m-auto">
+          <div className="flex flex-col gap-9  sm:w-2/4 md:w-full lg:w-2/3 m-auto">
             {variant === "register" && (
               <Input
                 label="Username"
@@ -60,7 +90,10 @@ export default function auth() {
               type="password"
               value={password}
             />
-            <button className="bg-red-600 py-3 text-white rounded-md w-full hover:bg-red-700 transition">
+            <button
+              onClick={variant === "login" ? login : register}
+              className="bg-red-600 py-3 text-white rounded-md w-full hover:bg-red-700 transition"
+            >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
             <p className="text-neutral-400">
