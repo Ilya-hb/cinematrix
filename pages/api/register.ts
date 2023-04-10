@@ -15,7 +15,7 @@ export default async function handler(
 
     const existingUser = await prismadb.user.findUnique({
       where: {
-        email,
+        email
       },
     });
 

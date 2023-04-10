@@ -4,6 +4,9 @@ import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+
 export default function auth() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -16,7 +19,7 @@ export default function auth() {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
-  
+
   const login = useCallback(async () => {
     try {
       await signIn("credentials", {
@@ -96,6 +99,38 @@ export default function auth() {
             >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
+            <div className="flex flex-row items-center gap-4 justify-center">
+              <div
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+                className="w-20
+                 h-10
+                  bg-white
+              flex
+              items-center
+              justify-center
+              cursor-pointer
+              hover:opacity-80
+              transition
+              "
+              >
+                <FcGoogle size={30} />
+              </div>
+              <div
+                onClick={() => signIn("github", { callbackUrl: "/" })}
+                className="w-20
+                h-10
+              bg-white
+              flex
+              items-center
+              justify-center
+              cursor-pointer
+              hover:opacity-80
+              transition
+              "
+              >
+                <FaGithub size={30} />
+              </div>
+            </div>
             <p className="text-neutral-400">
               {variant === "login"
                 ? "First time in Cinematrix?"
