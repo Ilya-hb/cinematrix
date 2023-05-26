@@ -97,7 +97,7 @@ export default function auth() {
             </button>
             <div className="flex flex-row items-center gap-4 justify-center">
               <div
-                onClick={() => signIn("google", { callbackUrl: "/profiles" })}
+                onClick={() => signIn("google", { callbackUrl: "/" })}
                 className="w-20
                  h-10
                   bg-white
