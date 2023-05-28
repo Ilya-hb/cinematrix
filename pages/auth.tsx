@@ -112,7 +112,7 @@ export default function auth() {
                 <FcGoogle size={30} />
               </div>
               <div
-                onClick={() => signIn("github", { callbackUrl: "/profiles" })}
+                onClick={() => signIn("github", { callbackUrl: "/" })}
                 className="w-20
                 h-10
               bg-white

@@ -5,9 +5,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 @layer base {
+  body{
+    @apply bg-[#141414] text-white !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-slate-200 
+  }
     html {
       font-family: 'Montserrat', sans-serif;
     }
+  }
+  .custom-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.568); /* Adjust the shadow properties as needed */
   }
   @layer components{
     .bannerButton{

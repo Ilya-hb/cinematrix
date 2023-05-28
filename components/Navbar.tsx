@@ -40,7 +40,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="w-full fixed z-100 text-white bg-black bg-opacity-60">
+    <nav className="w-full fixed z-50 text-white bg-black bg-opacity-60">
       <div
         className={`min-[0px]:justify-between
         lg:justify-normal
