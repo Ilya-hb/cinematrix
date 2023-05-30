@@ -7,6 +7,11 @@ import AccountMenu from "./AccountMenu";
 import { useState, useCallback } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Image from "next/image";
+import router from "next/router";
+
+const handleHomeClick = () => {
+  router.push("/");
+};
 
 export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -58,16 +63,17 @@ export default function Navbar() {
         <Image
           src="/images/red-logo.svg"
           alt="Logo"
-          className="h-7 cursor-pointer"
+          className="cursor-pointer h-[100] w-[100] sm:h-[200] sm:w-[200]"
           width={200}
           height={200}
+          onClick={handleHomeClick}
         />
         <div className="flex-row ml-8 gap-7 hidden lg:flex">
-          <NavbarItem label="Home" />
-          <NavbarItem label="Series" />
+          <NavbarItem label="Home" onClick={handleHomeClick} />
+          <NavbarItem label="Favorites" />
           <NavbarItem label="Films" />
           <NavbarItem label="New & Popular" />
-          <NavbarItem label="My List" />
+          <NavbarItem label="Quiz" />
         </div>
         <div
           onClick={toggleMobileMenu}

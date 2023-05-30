@@ -32,22 +32,22 @@ export default function Home({
 }: Props) {
   const { data: user } = useCurrentUser();
   // console.log(popular);
-  const KEY = process.env.THEMOVIEDB_API_KEY;
-  console.log(KEY);
   return (
-    <main className="">
-      <Navbar />
-      <Billboard popular={popular} />
-      <section className="z-20 relative sm:mt-10 md:mt-20">
-        <Row title="Trending now" movies={trendingNow} />
-        <Row title="Top Rated" movies={topRated} />
-        <Row title="Action Thrillers" movies={actionMovies} />
-        <Row title="Comedies" movies={comedyMovies} />
-        <Row title="Horror" movies={horrorMovies} />
-        <Row title="Romance" movies={romanceMovies} />
-        <Row title="Documentaries" movies={documentaries} />
-      </section>
-    </main>
+    <div className="relative h-screen bg-gradient-to-b lg:h-[120vh]">
+      <main className="">
+        <Navbar />
+        <Billboard popular={popular} />
+        <section className="z-20 relative sm:mt-10 md:mt-20">
+          <Row title="Trending now" movies={trendingNow} />
+          <Row title="Top Rated" movies={topRated} />
+          <Row title="Action Thrillers" movies={actionMovies} />
+          <Row title="Comedies" movies={comedyMovies} />
+          <Row title="Horror" movies={horrorMovies} />
+          <Row title="Romance" movies={romanceMovies} />
+          <Row title="Documentaries" movies={documentaries} />
+        </section>
+      </main>
+    </div>
   );
 }
 

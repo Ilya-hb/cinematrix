@@ -23,7 +23,7 @@ export default function auth() {
       await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/profiles",
+        callbackUrl: "/",
       });
     } catch (error) {
       console.log(error);

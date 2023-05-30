@@ -12,6 +12,35 @@
       font-family: 'Montserrat', sans-serif;
     }
   }
+  .thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .thumbnail-overlay:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .movie-name {
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .thumbnail-overlay:hover .movie-name {
+    opacity: 1;
+  }
+  
   .custom-shadow {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.568); /* Adjust the shadow properties as needed */
   }
