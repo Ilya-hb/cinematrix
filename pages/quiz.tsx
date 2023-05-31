@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import React from "react";
 
-function Search() {
+function quiz() {
   return (
     <div>
       <Navbar />
@@ -9,4 +9,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default quiz;

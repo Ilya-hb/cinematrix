@@ -1,12 +1,13 @@
 import Navbar from "@/components/Navbar";
 import React from "react";
 
-function Search() {
+function films() {
   return (
     <div>
       <Navbar />
+      
     </div>
   );
 }
 
-export default Search;
+export default films;

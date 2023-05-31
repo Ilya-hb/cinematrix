@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Movie } from "@/typings";
+import { Movie, Recommendations } from "@/typings";
 
 const API_KEY = process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -13,7 +13,19 @@ const requests = {
   fetchComedyMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=35`,
   fetchHorrorMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=27`,
   fetchRomanceMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=10749`,
-  fetchDocumentaries: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=99`,
+
+  fetchRecommendations: async (id: string): Promise<Recommendations[]> => {
+    try {
+      const response = await axios.get<{ results: Recommendations[] }>(
+        `${BASE_URL}/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US`
+      );
+      console.log(response.data);
+      return response.data.results;
+    } catch (error) {
+      console.error("Error fetching movie recommendations: ", error);
+      throw new Error("Failed to fetch recommendations");
+    }
+  },
   fetchMovieDetails: async (id: string): Promise<Movie> => {
     try {
       const response = await axios.get(

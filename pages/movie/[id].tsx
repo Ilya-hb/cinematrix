@@ -1,49 +1,56 @@
-import Navbar from "@/components/Navbar";
-import { Genre, Movie, Element } from "@/typings";
-import requests from "@/utils/requests";
-import { NextPage, NextPageContext } from "next";
+import { GetServerSideProps, NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
+
+import Navbar from "@/components/Navbar";
+import { Movie, Element, Recommendations } from "@/typings";
+import requests from "@/utils/requests";
+import React from "react";
+import Row from "@/components/Row";
+import RecommendationsGrid from "@/components/RecommendationsGrid";
 
 interface MovieProps {
   id: string;
   movie: Movie;
+  recommendations: Recommendations[];
 }
 
-const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
-  const [trailer, setTrailer] = useState("");
-  const [genres, setGenres] = useState<Genre[]>([]);
-
+const MoviePage: NextPage<MovieProps> = ({ id, movie, recommendations }) => {
+  console.log(recommendations);
+  const [trailer, setTrailer] = useState<string | undefined>(undefined);
   useEffect(() => {
-    if (!movie) return;
-    async function fetchMovie() {
-      const data = await fetch(
-        `https://api.themoviedb.org/3/${
-          movie?.media_type === "tv" ? "tv" : "movie"
-        }/${movie?.id}?api_key=${
-          process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY
-        }&language=en-US&append_to_response=videos`
-      )
-        .then((response) => response.json())
-        .catch((err) => console.log(err.message));
-
-      if (data?.videos) {
-        const index = data.videos.results.findIndex(
-          (element: Element) => element.type === "Trailer"
+    async function fetchMovieTrailer() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/${
+            movie.media_type === "tv" ? "tv" : "movie"
+          }/${movie.id}?api_key=${
+            process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY
+          }&language=en-US&append_to_response=videos`
         );
-        setTrailer(data.videos?.results[index]?.key);
-      }
-      if (data?.genres) {
-        setGenres(data.genres);
+        const data = await response.json();
+
+        if (data?.videos) {
+          const index = data.videos.results.findIndex(
+            (element: Element) => element.type === "Trailer"
+          );
+          setTrailer(data.videos.results[index]?.key);
+        }
+      } catch (error) {
+        console.error("Failed to fetch movie trailer:", error);
       }
     }
 
-    fetchMovie();
+    fetchMovieTrailer();
   }, [movie]);
 
-  console.log(trailer);
+  const handleHomepageClick = () => {
+    if (movie.homepage) {
+      window.open(movie.homepage, "_blank");
+    }
+  };
 
   return (
     <>
@@ -65,10 +72,8 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
             <div className="mb-6">
               <h1 className="text-3xl font-bold mb-2">{movie.title}</h1>
 
-              {movie?.tagline ? (
+              {movie.tagline && (
                 <p className="text-white text-lg">Tagline: {movie.tagline}</p>
-              ) : (
-                ""
               )}
               <p className="text-white text-lg">
                 Release Date: {movie.release_date}
@@ -79,6 +84,7 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
               <p className="text-white text-lg">
                 Runtime: {movie.runtime} minutes
               </p>
+
               {movie.budget ? (
                 <p className="text-white text-lg">
                   Budget: {movie.budget.toLocaleString()} $
@@ -86,27 +92,32 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
               ) : (
                 ""
               )}
+              {movie.homepage && (
+                <button
+                  className="text-white text-lg hover:underline bg-transparent border-none p-0"
+                  onClick={handleHomepageClick}
+                >
+                  {movie.title} Homepage
+                </button>
+              )}
             </div>
           </div>
 
           {/* Right Column - Movie Overview and Additional Information */}
-          <div className="lg:w-2/3 lg:pl-8 mt-6">
+          <div className="lg:w-2/3 lg:pl-8 mt-6 space-y-10">
             <h2 className="text-3xl font-bold mb-4">Overview</h2>
             <p className="mb-6 text-xl">{movie.overview}</p>
-            {trailer ? (
+            {trailer && (
               <div className="mb-6">
                 <ReactPlayer
                   url={`https://www.youtube.com/watch?v=${trailer}`}
-                  // style={{ height: "inherit" }}  
-                  width={"100%"}
-                  height={"400px"}
+                  width="100%"
+                  height="400px"
                   volume={0}
                   controls={true}
                   playing
                 />
               </div>
-            ) : (
-              ""
             )}
 
             <h2 className="text-3xl font-bold mb-4">Additional Information</h2>
@@ -120,7 +131,6 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
                   </React.Fragment>
                 ))}
               </li>
-              <li></li>
               <li>
                 <strong className="text-xl">Production Companies:</strong>{" "}
                 {movie.production_companies.map((company, index) => (
@@ -140,8 +150,10 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
                 ))}
               </li>
             </ul>
-
-            {/* Add more sections as needed, like trailers, reviews, similar movies */}
+            <div className="">
+              <h3 className="text-3xl font-semibold mb-5">More like this: </h3>
+              <RecommendationsGrid recommendations={recommendations} />
+            </div>
           </div>
         </div>
       </div>
@@ -149,8 +161,11 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie }) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
-  const session = await getSession(context);
+export const getServerSideProps: GetServerSideProps<MovieProps> = async (
+  context
+) => {
+  const session = await getSession({ req: context.req });
+
   if (!session) {
     return {
       redirect: {
@@ -166,13 +181,14 @@ export async function getServerSideProps(context: NextPageContext) {
   const movieId = Array.isArray(id) ? id[0] : id || ""; // Provide a default value for id
   // Fetch movie details based on the `movieId` parameter
   const movie = await requests.fetchMovieDetails(movieId);
-
+  const recommendations = await requests.fetchRecommendations(movieId);
   return {
     props: {
       id: movieId,
       movie,
+      recommendations,
     },
   };
-}
+};
 
 export default MoviePage;

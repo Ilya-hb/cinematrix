@@ -7,12 +7,23 @@ import AccountMenu from "./AccountMenu";
 import { useState, useCallback } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Image from "next/image";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 
 const handleHomeClick = () => {
   router.push("/");
 };
-
+const handleFilmsClick = () => {
+  router.push("/films");
+};
+const handleSearchClick = () => {
+  router.push("/search");
+};
+const handleFavoritesClick = () => {
+  router.push("/favorites");
+};
+const handleQuizClick = () => {
+  router.push("/quiz");
+};
 export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
@@ -25,6 +36,13 @@ export default function Navbar() {
   const toggleAccountMenu = useCallback(() => {
     setShowAccountMenu((current) => !current);
   }, []);
+
+  const router = useRouter();
+  const currentPath = router.asPath;
+
+  const isActiveLink = (path: string) => {
+    return currentPath === path ? "active" : "";
+  };
 
   const TOP_OFFSET = 40;
 
@@ -69,22 +87,43 @@ export default function Navbar() {
           onClick={handleHomeClick}
         />
         <div className="flex-row ml-8 gap-7 hidden lg:flex">
-          <NavbarItem label="Home" onClick={handleHomeClick} />
-          <NavbarItem label="Favorites" />
-          <NavbarItem label="Films" />
-          <NavbarItem label="New & Popular" />
-          <NavbarItem label="Quiz" />
+          <NavbarItem
+            label="Home"
+            onClick={handleHomeClick}
+            className={isActiveLink("/")}
+          />
+          <NavbarItem
+            label="Favorites"
+            onClick={handleFavoritesClick}
+            className={isActiveLink("/favorites")}
+          />
+          <NavbarItem
+            label="Films"
+            onClick={handleFilmsClick}
+            className={isActiveLink("/films")}
+          />
+          <NavbarItem
+            label="Search"
+            onClick={handleSearchClick}
+            className={isActiveLink("/search")}
+          />
+          <NavbarItem
+            label="Quiz"
+            onClick={handleQuizClick}
+            className={isActiveLink("/quiz")}
+          />
         </div>
         <div
           onClick={toggleMobileMenu}
           className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor:pointer"
         >
-          <p className="text-white cursor-pointer">Browse</p>
           <FaChevronDown
             className={`text-white transition cursor-pointer ${
               showMobileMenu ? "rotate-180" : "rotate-0"
             }`}
           />
+          <p className="text-white cursor-pointer">Browse</p>
+
           <MobileMenu visible={showMobileMenu} />
         </div>
         <div className="flex flex-row ml-auto gap-10 items-center">

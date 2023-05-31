@@ -1,13 +1,16 @@
-import { Movie } from "@/typings";
+import { Movie, Recommendations } from "@/typings";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 interface Props {
-  movie: Movie;
+  movie: Movie | Recommendations;
 }
 
 function Thumbnail({ movie }: Props) {
+  const title =
+    movie.title || movie.name || (movie as Recommendations)?.original_name;
+
   return (
     <Link href={`/movie/${movie.id}`} passHref>
       <div className="relative h-28 min-w-[180px] cursor-pointer transition duration-200 ease-out md:h-36 md:min-w-[260px] md:hover:scale-105">
@@ -20,9 +23,7 @@ function Thumbnail({ movie }: Props) {
           alt="image"
         />
         <div className="thumbnail-overlay">
-          <p className="text-xl movie-name">
-            {movie?.title || movie?.name || movie?.original_name}
-          </p>
+          <p className="text-xl movie-name">{title}</p>
         </div>
       </div>
     </Link>

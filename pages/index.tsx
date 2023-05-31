@@ -44,7 +44,6 @@ export default function Home({
           <Row title="Comedies" movies={comedyMovies} />
           <Row title="Horror" movies={horrorMovies} />
           <Row title="Romance" movies={romanceMovies} />
-          <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
     </div>
@@ -62,7 +61,6 @@ export async function getServerSideProps(context: NextPageContext) {
     comedyMovies,
     horrorMovies,
     romanceMovies,
-    documentaries,
   ] = await Promise.all([
     fetch(requests.fetchPopular).then((res) => res.json()),
     fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
@@ -72,7 +70,6 @@ export async function getServerSideProps(context: NextPageContext) {
     fetch(requests.fetchComedyMovies).then((res) => res.json()),
     fetch(requests.fetchHorrorMovies).then((res) => res.json()),
     fetch(requests.fetchRomanceMovies).then((res) => res.json()),
-    fetch(requests.fetchDocumentaries).then((res) => res.json()),
   ]);
   if (!session) {
     return {
@@ -92,7 +89,6 @@ export async function getServerSideProps(context: NextPageContext) {
         comedyMovies: comedyMovies.results,
         horrorMovies: horrorMovies.results,
         romanceMovies: romanceMovies.results,
-        documentaries: documentaries.results,
       },
     };
   }
