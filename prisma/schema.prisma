@@ -16,18 +16,17 @@ model User {
   // @default(auto()): sets a default value for the id field to be generated automatically by the database.
   // @map("_id"): maps the field name in Prisma to the corresponding field name in the database schema. In this case, it maps the id field to _id in the database.
   // @db.ObjectId: specifies that the id field in the database should be stored as a MongoDB ObjectId.
-  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
-  name                String
-  image               String?
-  email               String?   @unique
-  emailVerified       DateTime?
-  hashedPassword      String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  favoriteIds         String[]  @db.ObjectId
-  recomendationGenres String[]
-  sessions            Session[]
-  accounts            Account[]
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  image          String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  favoriteIds    String[] 
+  sessions       Session[]
+  accounts       Account[]
 }
 
 model Account {

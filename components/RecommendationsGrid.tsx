@@ -1,7 +1,6 @@
 import { Recommendations } from "@/typings";
 import React, { useState } from "react";
 import Link from "next/link";
-import Router from "next/router";
 
 interface Props {
   recommendations: Recommendations[];
@@ -35,7 +34,6 @@ function RecommendationsGrid({ recommendations }: Props) {
             <img
               src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
               alt={movie.title}
-
               className="w-full h-90% object-cover rounded-lg hover:scale-105 transition"
             />
             <p className="text-lg my-2 font-semibold">{movie.title}</p>
@@ -44,7 +42,7 @@ function RecommendationsGrid({ recommendations }: Props) {
       </div>
       {moviesWithImages.length > 12 && (
         <button
-          className="mt-4 text-xl text-red-500 hover:underline"
+          className="mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full px-6 py-3 mx-auto transition-colors duration-300 ease-in-out block"
           onClick={toggleShowAll}
         >
           {showAll ? "Show Less" : "Show More"}

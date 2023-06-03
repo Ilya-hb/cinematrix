@@ -1,25 +1,32 @@
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 
 import Navbar from "@/components/Navbar";
-import { Movie, Element, Recommendations } from "@/typings";
+import { Movie, Element, Recommendations, MovieCredits } from "@/typings";
 import requests from "@/utils/requests";
 import React from "react";
-import Row from "@/components/Row";
 import RecommendationsGrid from "@/components/RecommendationsGrid";
+import MovieCast from "@/components/MovieCast";
+import FavoritesButton from "@/components/FavoritesButton";
 
 interface MovieProps {
   id: string;
   movie: Movie;
   recommendations: Recommendations[];
+  movieCredits: MovieCredits[];
 }
 
-const MoviePage: NextPage<MovieProps> = ({ id, movie, recommendations }) => {
-  console.log(recommendations);
+const MoviePage: NextPage<MovieProps> = ({
+  id,
+  movie,
+  recommendations,
+  movieCredits,
+}) => {
   const [trailer, setTrailer] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     async function fetchMovieTrailer() {
       try {
@@ -94,12 +101,13 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie, recommendations }) => {
               )}
               {movie.homepage && (
                 <button
-                  className="text-white text-lg hover:underline bg-transparent border-none p-0"
+                  className="text-white text-lg underline bg-transparent border-none p-0"
                   onClick={handleHomepageClick}
-                >
+                  >
                   {movie.title} Homepage
                 </button>
               )}
+              <FavoritesButton movieId={id} />
             </div>
           </div>
 
@@ -150,6 +158,11 @@ const MoviePage: NextPage<MovieProps> = ({ id, movie, recommendations }) => {
                 ))}
               </li>
             </ul>
+
+            <div className="">
+              <MovieCast movieCredits={movieCredits} />
+            </div>
+
             <div className="">
               <h3 className="text-3xl font-semibold mb-5">More like this: </h3>
               <RecommendationsGrid recommendations={recommendations} />
@@ -182,11 +195,13 @@ export const getServerSideProps: GetServerSideProps<MovieProps> = async (
   // Fetch movie details based on the `movieId` parameter
   const movie = await requests.fetchMovieDetails(movieId);
   const recommendations = await requests.fetchRecommendations(movieId);
+  const movieCredits = await requests.fetchMovieCredits(movieId);
   return {
     props: {
       id: movieId,
       movie,
       recommendations,
+      movieCredits,
     },
   };
 };

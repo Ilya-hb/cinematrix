@@ -4,14 +4,15 @@ import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-
+import { AiFillAliwangwang } from "react-icons/ai";
 export default function auth() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [variant, setVariant] = useState("login");
-
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Regex for email validation
+  const isButtonDisabled =
+    variant === "login" && (!email || !password || !isEmailValid); // Include isEmailValid condition
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
       currentVariant === "login" ? "register" : "login"
@@ -91,7 +92,12 @@ export default function auth() {
             />
             <button
               onClick={variant === "login" ? login : register}
-              className="bg-red-600 py-3 text-white rounded-md w-full hover:bg-red-700 transition"
+              className={`py-3 text-white rounded-md w-full transition ${
+                isButtonDisabled
+                  ? "bg-red-600 disabled:opacity-75 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+              disabled={isButtonDisabled}
             >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
@@ -124,7 +130,12 @@ export default function auth() {
               transition
               "
               >
-                <FaGithub size={30} />
+                <img
+                  src="/images/icons8-github.svg"
+                  alt=""
+                  width={35}
+                  height={35}
+                />
               </div>
             </div>
             <p className="text-neutral-400">

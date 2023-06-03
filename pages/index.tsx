@@ -21,17 +21,13 @@ interface Props {
 
 export default function Home({
   popular,
-  netflixOriginals,
   actionMovies,
   comedyMovies,
-  documentaries,
   horrorMovies,
   romanceMovies,
   topRated,
   trendingNow,
 }: Props) {
-  const { data: user } = useCurrentUser();
-  // console.log(popular);
   return (
     <div className="relative h-screen bg-gradient-to-b lg:h-[120vh]">
       <main className="">
@@ -54,7 +50,6 @@ export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
   const [
     popular,
-    netflixOriginals,
     trendingNow,
     topRated,
     actionMovies,
@@ -63,7 +58,6 @@ export async function getServerSideProps(context: NextPageContext) {
     romanceMovies,
   ] = await Promise.all([
     fetch(requests.fetchPopular).then((res) => res.json()),
-    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
     fetch(requests.fetchTrending).then((res) => res.json()),
     fetch(requests.fetchTopRated).then((res) => res.json()),
     fetch(requests.fetchActionMovies).then((res) => res.json()),
@@ -82,7 +76,6 @@ export async function getServerSideProps(context: NextPageContext) {
     return {
       props: {
         popular: popular.results,
-        netflixOriginals: netflixOriginals.results,
         trendingNow: trendingNow.results,
         topRated: topRated.results,
         actionMovies: actionMovies.results,
