@@ -66,13 +66,4 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Movie {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String
-  videoUrl    String
-  thumbnail   String
-  genre       String[]
-  rating      Int
-  duration    String
-}
+
