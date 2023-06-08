@@ -1,25 +1,31 @@
 import Navbar from "@/components/Navbar";
 import { Movie } from "@/typings";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Favorites() {
   const [data, setData] = useState<string[] | null>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFavorites = async () => {
+      setLoading(true);
       try {
         const response = await fetch("/api/favorite");
         if (response.ok) {
           const favorites = await response.json();
-          setData(favorites);
-          console.log(favorites);
+          console.log("Favorites:", favorites);
+          setData(favorites.favoritedMovies || []);
+          console.log("Data:", data);
         } else {
           console.error("Failed to fetch favorites:", response.statusText);
         }
       } catch (error) {
         console.error("Failed to fetch favorites:", error);
       }
+      setLoading(false);
     };
 
     fetchFavorites();
@@ -27,7 +33,7 @@ function Favorites() {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      if (data && data.length > 0) {
+      if (Array.isArray(data) && data.length > 0) {
         const moviePromises = data.map(async (movieId) => {
           const response = await fetch(
             `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY}`
@@ -47,6 +53,8 @@ function Favorites() {
         const movieResults = await Promise.all(moviePromises);
         const filteredMovies = movieResults.filter((movie) => movie !== null);
         setMovies(filteredMovies);
+      } else {
+        console.log("No data or data length is 0");
       }
     };
 
@@ -56,26 +64,36 @@ function Favorites() {
   return (
     <>
       <Navbar />
-      <div className="container">
-        <h1 className="text-3xl font-bold">Favorites</h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {movies && movies.length > 0 ? (
-            movies.map((movie) => (
-              <div key={movie.id} className="bg-white p-4 rounded shadow">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                  alt={movie.title}
-                  className="w-full h-56 object-cover rounded"
-                />
-                <h2 className="text-lg font-bold mt-2">{movie.title}</h2>
-                <p className="text-sm">{movie.release_date}</p>
-                <p className="text-gray-600">{movie.overview}</p>
-              </div>
-            ))
-          ) : (
-            <p>No favorite movies found.</p>
-          )}
-        </div>
+      <div className="container mx-auto px-4 py-24">
+        <h1 className="text-3xl font-bold my-4">Your list</h1>
+        {loading ? (
+          <h2 className="text-4xl">
+            Loading...{" "}
+            <AiOutlineLoading className="text-4xl animate-spin inline-block" />
+          </h2>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 text-center">
+            {movies.length > 0 ? (
+              movies.map((movie) => (
+                <Link
+                  href={`/movie/${movie.id}`}
+                  passHref
+                  key={movie.id}
+                  className="rounded-lg"
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                    alt={movie.title}
+                    className="w-full h-80% object-cover rounded-lg hover:scale-105 transition"
+                  />
+                  <p className="text-xl my-3 font-semibold">{movie.title}</p>
+                </Link>
+              ))
+            ) : (
+              <h2 className="text-4xl">No favorite movies found {":("}</h2>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

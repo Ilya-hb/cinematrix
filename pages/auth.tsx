@@ -2,9 +2,8 @@ import Input from "@/components/Input";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
-
 import { FcGoogle } from "react-icons/fc";
-import { AiFillAliwangwang } from "react-icons/ai";
+
 export default function auth() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
