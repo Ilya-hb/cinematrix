@@ -136,7 +136,7 @@ export default function Navbar() {
             className="flex-row items-center cursor-pointer gap-2 relative md:flex hidden "
           >
             <div className="w-10 h-10 lg:w-10 lg:h-10 rounded-lg overflow-hidden">
-              {user && <img src={user.image || "/images/user.png"} />}
+              {user && <img src={user.image || "/images/user.png"} alt="user image"/>}
             </div>
             <div className="text-lg">{user?.name}</div>
             <FaChevronDown

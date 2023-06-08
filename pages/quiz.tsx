@@ -13,11 +13,18 @@ interface Question {
   incorrect_answers: string[];
 }
 
+interface UserAnswer {
+  question: string;
+  userAnswer: string;
+  correctAnswer: string;
+}
+
 function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +36,7 @@ function Quiz() {
   const fetchQuestions = async () => {
     try {
       const response = await axios.get<{ results: Question[] }>(
-        "https://opentdb.com/api.php?amount=10&category=11"
+        "https://opentdb.com/api.php?amount=10&category=11&difficulty=easy&type=multiple"
       );
       const { data } = response;
       setQuestions(data.results);
@@ -48,6 +55,14 @@ function Quiz() {
     if (selectedOption === questions[currentQuestionIndex].correct_answer) {
       setScore((prevScore) => prevScore + 1);
     }
+    setUserAnswers((prevUserAnswers) => [
+      ...prevUserAnswers,
+      {
+        question: questions[currentQuestionIndex].question,
+        userAnswer: selectedOption || "",
+        correctAnswer: questions[currentQuestionIndex].correct_answer,
+      },
+    ]);
     setSelectedOption(null);
     if (currentQuestionIndex === questions.length - 1) {
       setShowResult(true);
@@ -60,6 +75,7 @@ function Quiz() {
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
+    setUserAnswers([]);
     setShowResult(false);
     setShowCorrectAnswers(false);
     fetchQuestions();
@@ -94,35 +110,37 @@ function Quiz() {
           >
             Restart Quiz
           </button>
-          <div className="mt-8">
-            {showCorrectAnswers ? (
-              <div>
-                <h3 className="text-2xl font-semibold">Correct Answers:</h3>
-                {questions.map((question, index) => (
-                  <div key={index} className="my-4">
-                    <h4 className="text-xl">{he.decode(question.question)}</h4>
-                    <ul className="list-disc list-inside">
-                      {question.incorrect_answers.map((option, optionIndex) => (
-                        <li key={optionIndex} className="text-red-500">
-                          {he.decode(option)}
-                        </li>
-                      ))}
-                      <li className="text-green-500 font-bold">
-                        {question.correct_answer}
+          {showCorrectAnswers && (
+            <div className="mt-8 text-left">
+              <h3 className="text-xl font-semibold mb-4">Correct Answers:</h3>
+              {userAnswers.map((userAnswer, index) => (
+                <div key={index} className="my-4">
+                  <h4 className="text-xl">{he.decode(userAnswer.question)}</h4>
+                  <ul className="list-disc list-inside">
+                    {questions[index].incorrect_answers.map((option, optionIndex) => (
+                      <li key={optionIndex} className="text-red-500">
+                        {option}
                       </li>
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <button
-                className={`text-xl bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full px-6 py-3 mx-auto transition-colors duration-300 ease-in-out block`}
-                onClick={handleShowCorrectAnswers}
-              >
-                Show Correct Answers
-              </button>
-            )}
-          </div>
+                    ))}
+                    <li className="text-green-500 font-bold">
+                      {questions[index].correct_answer}
+                    </li>
+                  </ul>
+                  <p>
+                    Your answer: <strong>{userAnswer.userAnswer}</strong>
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+          {!showCorrectAnswers && (
+            <button
+              className={`mt-4 text-xl bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full px-6 py-3 mx-auto transition-colors duration-300 ease-in-out block`}
+              onClick={handleShowCorrectAnswers}
+            >
+              Show Correct Answers
+            </button>
+          )}
         </div>
       </>
     );

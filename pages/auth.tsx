@@ -1,10 +1,28 @@
 import Input from "@/components/Input";
 import axios from "axios";
 import { useCallback, useState } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
+import { NextPageContext } from "next";
 
-export default function auth() {
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
+
+const Auth = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -157,4 +175,5 @@ export default function auth() {
       </div>
     </div>
   );
-}
+};
+export default Auth;
