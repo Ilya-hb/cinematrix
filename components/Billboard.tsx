@@ -2,8 +2,6 @@ import { baseUrl } from "@/constants/movie";
 import { Movie } from "@/typings";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FaPlay } from "react-icons/fa";
-import { BiInfoCircle } from "react-icons/bi";
 interface Props {
   popular: Movie[];
 }
@@ -15,7 +13,6 @@ const Billboard = ({ popular }: Props) => {
     setMovie(popular[Math.floor(Math.random() * popular.length)]);
   }, [popular]);
 
-  //   console.log(movie);
 
   return (
     <div className="flex flex-col space-y-5 py-16 md:space-y-10 md:space-x-20 lg:h-[65vh] lg:pb-12">
@@ -33,15 +30,7 @@ const Billboard = ({ popular }: Props) => {
       <p className="text-white max-w-xs text-xl md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl drop-shadow-lg shadow-black mx-auto sm:block my-auto">
         {movie?.overview}
       </p>
-      <div className="flex space-x-10 mx-auto md:mx-7 z-0">
-        <button className="bannerButton bg-white text-black text-xl">
-          <FaPlay className="h-4 w-4 text-black md:h-7 md:w-7" /> Play
-        </button>
-        <button className="bannerButton bg-[gray]/70 text-white text-xl">
-          More info
-          <BiInfoCircle className="h-6 w-6 text-white md:h-8 md:w-8" />
-        </button>
-      </div>
+     
     </div>
   );
 };

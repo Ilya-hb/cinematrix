@@ -100,12 +100,12 @@ const MoviePage: NextPage<MovieProps> = ({
                 ""
               )}
               {movie.homepage && (
-                <button
-                  className="text-white text-lg underline bg-transparent border-none p-0"
+                <a
+                  className="text-white text-lg underline bg-transparent cursor-pointer border-none p-0"
                   onClick={handleHomepageClick}
                   >
                   {movie.title} Homepage
-                </button>
+                </a>
               )}
               <FavoritesButton movieId={id} />
             </div>
