@@ -117,11 +117,13 @@ function Quiz() {
                 <div key={index} className="my-4">
                   <h4 className="text-xl">{he.decode(userAnswer.question)}</h4>
                   <ul className="list-disc list-inside">
-                    {questions[index].incorrect_answers.map((option, optionIndex) => (
-                      <li key={optionIndex} className="text-red-500">
-                        {option}
-                      </li>
-                    ))}
+                    {questions[index].incorrect_answers.map(
+                      (option, optionIndex) => (
+                        <li key={optionIndex} className="text-red-500">
+                          {option}
+                        </li>
+                      )
+                    )}
                     <li className="text-green-500 font-bold">
                       {questions[index].correct_answer}
                     </li>
@@ -151,7 +153,7 @@ function Quiz() {
   const options = [
     ...currentQuestion.incorrect_answers,
     currentQuestion.correct_answer,
-  ].sort();
+  ];
 
   return (
     <>

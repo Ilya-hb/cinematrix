@@ -63,7 +63,7 @@ const MoviePage: NextPage<MovieProps> = ({
     <>
       <Navbar />
 
-      <div className="container mx-auto px-4 py-24">
+      <div className="container mx-auto px-4 py-32">
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-1/3">
             {/* Left Column - Movie Poster and Details */}

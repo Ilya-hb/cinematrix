@@ -127,16 +127,14 @@ export default function Navbar() {
           <MobileMenu visible={showMobileMenu} />
         </div>
         <div className="flex flex-row ml-auto gap-10 items-center">
-          <div className="text-gray-200 hover:text-gray-300 cursor-pointer transition">
-            <BsSearch className="text-xl hidden md:block" />
-          </div>
-
           <div
             onClick={toggleAccountMenu}
             className="flex-row items-center cursor-pointer gap-2 relative md:flex hidden "
           >
             <div className="w-10 h-10 lg:w-10 lg:h-10 rounded-lg overflow-hidden">
-              {user && <img src={user.image || "/images/user.png"} alt="user image"/>}
+              {user && (
+                <img src={user.image || "/images/user.png"} alt="user image" />
+              )}
             </div>
             <div className="text-lg">{user?.name}</div>
             <FaChevronDown

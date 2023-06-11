@@ -4,9 +4,19 @@ interface InputProps {
   value: string;
   label: string;
   type: string;
+  sx?: string;
+  onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void; // Add onKeyPress event
 }
 
-const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
+const Input: React.FC<InputProps> = ({
+  id,
+  onChange,
+  value,
+  label,
+  type,
+  sx,
+  onKeyPress, 
+}) => {
   return (
     <div className="relative">
       <input
@@ -14,24 +24,24 @@ const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
         onChange={onChange}
         value={value}
         id={id}
-        className="
-              rounded-md
-            text-white
-            bg-neutral-700
-              w-full
-              px-6
-              pt-6
-              pb-1
-              appearance-none
-              peer
-              focus:ring-0
-              focus:border-transparent
-              text-lg
-              outline-none
-              block
-              peer
-              border-transparent
-              "
+        onKeyPress={onKeyPress} 
+        className={` rounded-md
+        text-white
+        bg-neutral-700
+          w-full
+          px-6
+          pt-6
+          pb-1
+          appearance-none
+          peer
+          focus:ring-0
+          focus:border-transparent
+          text-lg
+          outline-none
+          block
+          peer
+          border-transparent
+          ${sx}`}
         placeholder=" "
       />
       <label
