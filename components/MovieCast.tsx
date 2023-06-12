@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MovieCredits } from "@/typings";
+import Link from "next/link";
 
 interface Props {
   movieCredits: MovieCredits[];
@@ -25,14 +26,19 @@ function MovieCast({ movieCredits }: Props) {
       <h2 className="text-2xl font-bold mb-4">Movie Cast</h2>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
         {visibleActors.map((credit) => (
-          <div key={credit.id} className="flex flex-col items-center">
+          <Link
+            key={credit.id}
+            href={`/people/${credit.id}`}
+            passHref
+            className="text-center hover:scale-105 transition flex flex-col items-center"
+          >
             <img
               src={`https://image.tmdb.org/t/p/w200${credit.profile_path}`}
               alt={credit.name}
               className="w-32 h-32 rounded-full object-cover"
             />
-            <span className="text-center mt-2">{credit.name}</span>
-          </div>
+            <p className="text-center mt-4">{credit.name}</p>
+          </Link>
         ))}
       </div>
       {actorsWithImages.length > 12 && (

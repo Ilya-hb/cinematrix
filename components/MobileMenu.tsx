@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 interface MobileMenuProps {
   visible?: boolean;
@@ -22,9 +23,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ visible }) => {
             Favorites
           </div>
         </Link>
-        <Link href={`/films`} passHref>
+        <Link href={`/people`} passHref>
           <div className="px-3 text-center text-white hover:underline">
-            Films
+            People
           </div>
         </Link>
         <Link href={`/search`} passHref>
@@ -38,6 +39,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ visible }) => {
             Quiz
           </div>
         </Link>
+        <div
+          onClick={() => signOut()}
+          className="px-3 text-center text-white hover:underline"
+        >
+          Sign Out
+        </div>
       </div>
     </div>
   );

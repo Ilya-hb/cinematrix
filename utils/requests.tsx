@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Movie, MovieCredits, Recommendations } from "@/typings";
+import { Movie, MovieCredits, Person, Recommendations } from "@/typings";
 
 const API_KEY = process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -48,6 +48,29 @@ const requests = {
       // Handle error
       console.error("Error fetching movie details:", error);
       throw new Error("Failed to fetch movie details");
+    }
+  },
+  fetchTrendingPeople: async (): Promise<Person[]> => {
+    try {
+      const response = await axios.get<{ results: Person[] }>(
+        `${BASE_URL}/trending/person/day?api_key=${API_KEY}&language=en-US&page=1`
+      );
+      return response.data.results;
+    } catch (error) {
+      console.error("Error fetching trending people: ", error);
+      throw new Error("Failed to fetch trending people");
+    }
+  },
+  fetchPersonDetails: async (id: string): Promise<Person> => {
+    try {
+      const response = await axios.get<Person>(
+        `${BASE_URL}/person/${id}?api_key=${API_KEY}&language=en-US`
+      );
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching person details: ", error);
+      throw new Error("Failed to fetch person details");
     }
   },
 };

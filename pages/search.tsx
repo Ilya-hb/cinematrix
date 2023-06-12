@@ -4,6 +4,25 @@ import { Movie } from "@/typings";
 import Input from "@/components/Input";
 import Link from "next/link";
 import { AiOutlineLoading } from "react-icons/ai";
+import { getSession } from "next-auth/react";
+import { NextPageContext } from "next";
+
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,17 +31,17 @@ function Search() {
 
   const handleSearch = async () => {
     try {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       const response = await fetch(
         `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY}&query=${searchQuery}`
       );
       const data = await response.json();
       setSearchResults(data.results);
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to search movies:", error);
       setSearchResults([]);
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -33,7 +52,7 @@ function Search() {
   return (
     <div>
       <Navbar />
-      <div className="w-full h-full bg-[url('/images/background_3.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+      <div className="w-full min-h-screen bg-[url('/images/background_3.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
         <div className="container mx-auto px-4 py-32 flex flex-col items-center">
           <h2 className="text-3xl font-bold mb-4">Movie Search</h2>
           <div className="flex">
@@ -49,7 +68,6 @@ function Search() {
             <button
               onClick={handleSearch}
               className="bg-red-600 text-white text-xl px-4 py-2 hover:bg-red-700 transition rounded-none"
-
             >
               Search
             </button>
@@ -68,7 +86,6 @@ function Search() {
                     <Link
                       href={`/movie/${movie.id}`}
                       passHref
-                      key={movie.id}
                       className="rounded-lg"
                     >
                       <img

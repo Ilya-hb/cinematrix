@@ -31,7 +31,10 @@ export default function Home({
     <div className="relative h-screen bg-gradient-to-b lg:h-[120vh]">
       <main className="">
         <Navbar />
-        <Billboard popular={popular} />
+        <div className="bg-gradient-to-b">
+          <Billboard popular={popular} />
+        </div>
+
         <section className="z-20 relative sm:mt-10 md:mt-20">
           <Row title="Trending now" movies={trendingNow} />
           <Row title="Top Rated" movies={topRated} />

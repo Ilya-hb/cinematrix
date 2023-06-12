@@ -28,7 +28,7 @@ const Input: React.FC<InputProps> = ({
         className={` rounded-md
         text-white
         bg-neutral-700
-          w-full
+          
           px-6
           pt-6
           pb-1

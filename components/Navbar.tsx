@@ -13,7 +13,7 @@ const handleHomeClick = () => {
   router.push("/");
 };
 const handleFilmsClick = () => {
-  router.push("/films");
+  router.push("/people");
 };
 const handleSearchClick = () => {
   router.push("/search");
@@ -29,7 +29,6 @@ export default function Navbar() {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
   const { data: user } = useCurrentUser();
-  // console.log(user);
   const toggleMobileMenu = useCallback(() => {
     setShowMobileMenu((current) => !current);
   }, []);
@@ -66,12 +65,13 @@ export default function Navbar() {
     <nav className="w-full fixed z-50 text-white bg-black bg-opacity-60">
       <div
         className={`min-[0px]:justify-between
-        lg:justify-normal
+        lg:justify-between
         px-4
         md:px-16
         py-6
         flex
         flex-row
+        justify-between
         items-center
         transition
         duration-500
@@ -81,9 +81,9 @@ export default function Navbar() {
         <Image
           src="/images/red-logo.svg"
           alt="Logo"
-          className="cursor-pointer h-[100] w-[100] sm:h-[200] sm:w-[200]"
-          width={200}
-          height={200}
+          className="cursor-pointer sm:h-[200] sm:w-[200]"
+          width={175}
+          height={175}
           onClick={handleHomeClick}
         />
         <div className="flex-row ml-8 gap-7 hidden lg:flex">
@@ -98,9 +98,9 @@ export default function Navbar() {
             className={isActiveLink("/favorites")}
           />
           <NavbarItem
-            label="Films"
+            label="People"
             onClick={handleFilmsClick}
-            className={isActiveLink("/films")}
+            className={isActiveLink("/people")}
           />
           <NavbarItem
             label="Search"

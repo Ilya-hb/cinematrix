@@ -103,7 +103,7 @@ const MoviePage: NextPage<MovieProps> = ({
                 <a
                   className="text-white text-lg underline bg-transparent cursor-pointer border-none p-0"
                   onClick={handleHomepageClick}
-                  >
+                >
                   {movie.title} Homepage
                 </a>
               )}

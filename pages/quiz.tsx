@@ -3,6 +3,8 @@ import axios from "axios";
 import Navbar from "@/components/Navbar";
 import { AiOutlineLoading } from "react-icons/ai";
 import he from "he";
+import { getSession } from "next-auth/react";
+import { NextPageContext } from "next";
 
 interface Question {
   category: string;
@@ -19,6 +21,23 @@ interface UserAnswer {
   correctAnswer: string;
 }
 
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
+
 function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -28,15 +47,16 @@ function Quiz() {
   const [showResult, setShowResult] = useState(false);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [difficulty, setDifficulty] = useState("easy");
 
   useEffect(() => {
-    fetchQuestions();
-  }, []);
+    fetchQuestions(difficulty);
+  }, [difficulty]);
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (selectedDifficulty: string) => {
     try {
       const response = await axios.get<{ results: Question[] }>(
-        "https://opentdb.com/api.php?amount=10&category=11&difficulty=easy&type=multiple"
+        `https://opentdb.com/api.php?amount=10&category=11&difficulty=${selectedDifficulty}&type=multiple`
       );
       const { data } = response;
       setQuestions(data.results);
@@ -49,6 +69,11 @@ function Quiz() {
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
+  };
+  const handleDifficultyChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDifficulty(event.target.value);
   };
 
   const handleNextQuestion = () => {
@@ -78,7 +103,7 @@ function Quiz() {
     setUserAnswers([]);
     setShowResult(false);
     setShowCorrectAnswers(false);
-    fetchQuestions();
+    fetchQuestions(difficulty);
   };
 
   const handleShowCorrectAnswers = () => {
@@ -103,7 +128,9 @@ function Quiz() {
         <Navbar />
         <div className="container mx-auto px-4 py-24 text-center space-y-4">
           <h2 className="text-3xl">Quiz Result</h2>
+          <p className="text-2xl">Difficulty: {difficulty}</p>
           <p className="text-2xl">Your Score: {score}</p>
+
           <button
             className={`mt-4 text-xl bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full px-6 py-3 mx-auto transition-colors duration-300 ease-in-out block`}
             onClick={restartQuiz}
@@ -158,8 +185,26 @@ function Quiz() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto px-4 py-24">
+      <div className="container mx-auto px-4 py-32">
         <h2 className="text-3xl font-bold mb-4">Quiz Page</h2>
+
+        {/* Difficulty selection */}
+        <div className="mb-4">
+          <label htmlFor="difficulty" className="text-xl">
+            Select Difficulty:
+          </label>
+          <select
+            id="difficulty"
+            value={difficulty}
+            onChange={handleDifficultyChange}
+            className="bg-neutral-700 text-xl px-3 py-2 rounded-md mt-2 block my-6"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+
         <p className="text-2xl">Question {currentQuestionIndex + 1}</p>
         <h3 className="text-xl font-semibold my-4">{decodedQuestion}</h3>
         <ul className="list-disc list-inside">

@@ -1,8 +1,27 @@
 import Navbar from "@/components/Navbar";
 import { Movie } from "@/typings";
+import { NextPageContext } from "next";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 function Favorites() {
   const [data, setData] = useState<string[] | null>(null);
