@@ -129,21 +129,21 @@ export default function Navbar() {
         <div className="flex flex-row ml-auto gap-10 items-center">
           <div
             onClick={toggleAccountMenu}
-            className="flex-row items-center cursor-pointer gap-2 relative md:flex hidden "
+            className="flex-row items-center cursor-pointer gap-2 relative md:flex "
           >
             <div className="w-10 h-10 lg:w-10 lg:h-10 rounded-lg overflow-hidden">
               {user && (
                 <img src={user.image || "/images/user.png"} alt="user image" />
               )}
             </div>
-            <div className="text-lg">{user?.name}</div>
+            <div className="text-lg hidden md:flex">{user?.name}</div>
             <FaChevronDown
-              className={`text-white transition ${
+              className={`text-white transition hidden md:flex ${
                 showAccountMenu ? "rotate-180" : "rotate-0"
               }`}
             />
             <AccountMenu visible={showAccountMenu} />
-          </div>
+          </div>  
         </div>
       </div>
     </nav>

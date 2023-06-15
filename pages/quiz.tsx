@@ -49,6 +49,8 @@ function Quiz() {
   const [isLoading, setIsLoading] = useState(true);
   const [difficulty, setDifficulty] = useState("easy");
 
+  console.log(difficulty);
+
   useEffect(() => {
     fetchQuestions(difficulty);
   }, [difficulty]);

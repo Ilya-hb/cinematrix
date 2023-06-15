@@ -86,6 +86,7 @@ const Auth = () => {
                 id="name"
                 type="name"
                 value={name}
+                sx={'w-full'}
               />
             )}
 
@@ -97,6 +98,7 @@ const Auth = () => {
               id="email"
               type="email"
               value={email}
+              sx={'w-full'}
             />
             <Input
               label="Password"
@@ -106,6 +108,7 @@ const Auth = () => {
               id="password"
               type="password"
               value={password}
+              sx={'w-full'}
             />
             <button
               onClick={variant === "login" ? login : register}

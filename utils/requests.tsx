@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Movie, MovieCredits, Person, Recommendations } from "@/typings";
+import {
+  Movie,
+  MovieCredits,
+  Person,
+  PersonImages,
+  Recommendations,
+} from "@/typings";
 
 const API_KEY = process.env.NEXT_PUBLIC_THEMOVIEDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -66,7 +72,7 @@ const requests = {
       const response = await axios.get<Person>(
         `${BASE_URL}/person/${id}?api_key=${API_KEY}&language=en-US`
       );
-      console.log(response)
+      console.log(response);
       return response.data;
     } catch (error) {
       console.error("Error fetching person details: ", error);

@@ -65,15 +65,21 @@ const PeoplePage: NextPage<PeopleProps> = ({ id, person }) => {
             </div>
             <div className="mb-6">
               <h1 className="text-3xl font-bold mb-2">{person.name}</h1>
-              <p className="text-white text-lg">
-                Place of Birth: {person.place_of_birth}
-              </p>
-              <p className="text-white text-lg">
-                Birthday: {person.birthday}
-              </p>
-              <p className="text-white text-lg">
-                Deathday: {person.deathday}
-              </p>
+              {person.place_of_birth && (
+                <p className="text-white text-lg">
+                  Place of Birth: {person.place_of_birth}
+                </p>
+              )}
+              {person.birthday && (
+                <p className="text-white text-lg">
+                  Birthday: {person.birthday}
+                </p>
+              )}
+              {person.deathday && (
+                <p className="text-white text-lg">
+                  Deathday: {person.deathday}
+                </p>
+              )}
               <p className="text-white text-lg">
                 Known for: {person.known_for_department}
               </p>

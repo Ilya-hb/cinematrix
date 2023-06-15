@@ -99,23 +99,35 @@ export interface Person {
   birthday: string;
   deathday: string;
   known_for: KnownFor[];
-}
-
-export interface KnownFor {
-  name: string;
+} 
+interface MovieCredits {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
+  genre_ids: number[];
   id: number;
-  title: string;
   original_language: string;
   original_title: string;
   overview: string;
-  poster_path: string;
-  media_type: string;
-  genre_ids: number[];
   popularity: number;
+  poster_path: string | null;
   release_date: string;
+  title: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
+}
+
+interface PersonImage {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string | null;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+interface PersonImages {
+  id: number;
+  profiles: PersonImage[];
 }
