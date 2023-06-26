@@ -4,7 +4,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { AiFillHeart, AiOutlineHeart, AiOutlineLoading } from "react-icons/ai";
 
 interface Props {
-  movieId: string;
+  movieId: string | number | undefined;
 }
 
 function FavoritesButton({ movieId }: Props) {

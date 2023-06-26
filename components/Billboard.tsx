@@ -1,6 +1,7 @@
 import { baseUrl } from "@/constants/movie";
 import { Movie } from "@/typings";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 interface Props {
   popular: Movie[];
@@ -29,6 +30,11 @@ const Billboard = ({ popular }: Props) => {
       <p className="text-white max-w-xs text-xl md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl drop-shadow-lg shadow-black mx-auto sm:block my-auto">
         {movie?.overview}
       </p>
+      <Link href={`/movie/${movie?.id}`} passHref className="z-30 mx-auto sm:block my-auto">
+        <button className="bg-red-600 text-white text-2xl px-4 py-2 hover:bg-red-700 transition rounded-none w-auto">
+          More info
+        </button>
+      </Link>
     </div>
   );
 };

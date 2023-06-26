@@ -23,6 +23,7 @@ export interface Movie {
   tagline?: string;
   runtime: number;
   budget?: number;
+  imdb_id: string;
   homepage?: string;
   production_companies: ProductionCompany[];
   genres: Genre[];
