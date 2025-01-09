@@ -145,7 +145,7 @@ const MoviePage: NextPage<MovieProps> = ({
               id="yohoho"
               className="w-full h-[400px]"
               data-title={movie.title}
-              data-player="bazon"
+              data-player="kodik"
             ></div>
 
             <h2 className="text-3xl font-bold mb-4">Additional Information</h2>
