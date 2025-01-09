@@ -27,18 +27,18 @@ const MoviePage: NextPage<MovieProps> = ({
 }) => {
   const [trailer, setTrailer] = useState<string | undefined>(undefined);
 
-  // useEffect(() => {
-  //   const script = document.createElement("script");
-  //   script.src = "//yohoho.cc/yo.js";
-  //   script.async = true;
-  //   script.dataset.title = movie.title;
-  //   document.getElementById("yohoho")?.appendChild(script);
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "//yohoho.cc/yo.js";
+    script.async = true;
+    script.dataset.title = movie.title;
+    document.getElementById("yohoho")?.appendChild(script);
 
-  //   return () => {
-  //     // Cleanup script when the component is unmounted
-  //     script.remove();
-  //   };
-  // }, [movie.title]);
+    return () => {
+      // Cleanup script when the component is unmounted
+      script.remove();
+    };
+  }, [movie.title]);
 
   useEffect(() => {
     async function fetchMovieTrailer() {
@@ -141,12 +141,12 @@ const MoviePage: NextPage<MovieProps> = ({
               </div>
             )}
             <br />
-            {/* <div
+            <div
               id="yohoho"
               className="w-full h-[400px]"
               data-title={movie.title}
-              data-player='bazon'
-            ></div> */}
+              data-player="bazon"
+            ></div>
 
             <h2 className="text-3xl font-bold mb-4">Additional Information</h2>
             <ul className="mb-6 space-y-2">
